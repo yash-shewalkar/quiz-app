@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
+//import java.util.Base64;
 
 public class QuizLoginPage extends JFrame {
 //    public JFrame login_frame;
@@ -153,14 +153,14 @@ public class QuizLoginPage extends JFrame {
         adminPanel.add(adminUsernameField);
         adminPanel.add(adminPasswordField);
         adminPanel.add(adminLoginButton);
-        adminPanel.add(adminSignInButton);
+//        adminPanel.add(adminSignInButton);
         adminPanel.add(adminTitleLabel);
 
 
         JFrame mainFrame = frame();
         // Add panels to frame
         mainFrame.add(adminPanel);
-        navbarPanel = createNavbarPanel("Login/Sign in");
+        navbarPanel = createNavbarPanel("Login");
         mainFrame.add(navbarPanel);
 
         mainFrame.setLayout(null);

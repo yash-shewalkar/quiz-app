@@ -11,7 +11,7 @@ public class DBExamManager {
     private static final String PASSWORD = "1234";
 
     public static void insertExamData(String subject, int questionSet) {
-        String sql = "INSERT INTO ExamsData (subject, questionSet) VALUES (?, ?)";
+        String sql = "INSERT INTO examsdata (subject, questionSet) VALUES (?, ?)";
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, subject);

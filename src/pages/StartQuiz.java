@@ -15,6 +15,7 @@
         String userNme  = new QuizLoginPage().getusername();
 
         public JLabel profile_Name ;
+        private JLabel timerLabel;
 
         private JButton logoutbtn, saveNext, previous,submit;
         private String[] subs = {"DS", "DBMS", "JAVA","IOT","DS"};
@@ -43,11 +44,12 @@
         private Connection connection;
         private PreparedStatement preparedStatement;
         private ResultSet resultSet;
+        private Timer timer;
 
         // Establish database connection
         public void connectToDatabase() {
             try {
-                // Your database connection details
+
                 String url = "jdbc:mysql://localhost:3306/quiz_app";
                 String username = "root";
                 String password = "1234";
@@ -178,14 +180,11 @@
             option4Label.setBounds(550, 450, 50, 50);
             option4RadioButton.setBounds(600, 450, 300, 50);
 
-            // Initialize questionTextLabel
-//            questionTextLabel = new JLabel();
-//            questionTextLabel.setFont(new Font("Arial", Font.PLAIN, 25)); // Setting font size to 25
-//
-//            // Set bounds for questionTextLabel
-//            questionTextLabel.setBounds(260, 330, 850, 100);
+
 
             profile_Name = new CreateExam().profile(userNme);
+
+
 
 
             // adding to the frame
@@ -206,6 +205,10 @@
 
                 }
             });
+
+            //timer
+            timerLabel = createTimer();
+
             LogoutUtility.addLogoutListener(logoutbtn);
             navbarPanel.add(logoutbtn);
 
@@ -225,6 +228,7 @@
             examDashboard.add(previous);
             examDashboard.add(submit);
             examDashboard.add(questionNumber);
+            examDashboard.add(timerLabel);
             // Add questionTextLabel to examDashboard
 //            examDashboard.add(questionTextLabel);
             navbarPanel.add(logoutbtn);
@@ -313,6 +317,37 @@
 
 
             return saveNxt;
+        }
+
+        private JLabel createTimer()
+        {
+            JLabel timerL = new JLabel("Time left: 1:00"); // Initial time is 1 minute (60 seconds)
+            timerL.setFont(new Font("Arial", Font.BOLD, 20));
+            timerL.setBounds(1000, 300, 200, 30); // Adjust the bounds as needed
+
+            // Add the timer label to the examDashboard panel
+//            examDashboard.add(timerL);
+            timer = new Timer(1000, new ActionListener() {
+                int secondsLeft = 60; // 60 seconds = 1 minute
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (secondsLeft > 0) {
+                        // Update the timer label with the remaining time
+                        int minutes = secondsLeft / 60;
+                        int seconds = secondsLeft % 60;
+                        timerLabel.setText("Time left: " + minutes + ":" + String.format("%02d", seconds));
+                        secondsLeft--;
+                    } else {
+                        // Auto-submit the exam when the timer reaches 0
+                        submit.doClick(); // Trigger the submit button click event
+                        timer.stop(); // Stop the timer
+                    }
+                }
+            });
+            timer.start();
+
+            return timerL;
         }
         public JButton previous(String subject) {
             JButton preVious = new JButton("Previous");

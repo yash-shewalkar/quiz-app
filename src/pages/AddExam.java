@@ -24,7 +24,7 @@ public class AddExam extends JFrame {
     public int w = 1540, h = 1200;
     public int wp = 8 * (w / 10), hp = 5 * (h / 10);
     String userNme  = new QuizLoginPage().getusername();
-
+    public String subject;
     public JLabel profile_Name ;
 
     public JComboBox<String> navigationDropDown;
@@ -164,7 +164,7 @@ public class AddExam extends JFrame {
 
 
         saveNext.addActionListener(e -> {
-            String subject = (String) subjectDropdown.getSelectedItem();
+            subject = (String) subjectDropdown.getSelectedItem();
             int questionSet = (int) questionSetDropdown.getSelectedItem();
             String questionTxt = questionText.getText();
             String option1Text = option1.getText();
@@ -172,6 +172,7 @@ public class AddExam extends JFrame {
             String option3Text = option3.getText();
             String option4Text = option4.getText();
             int correctOptionIndex = correctOpts.getSelectedIndex() + 1;
+            System.out.println("CorrectOption Index"+correctOptionIndex);
             String correctOption = "";
             switch (correctOptionIndex) {
                 case 1:
@@ -187,12 +188,13 @@ public class AddExam extends JFrame {
                     correctOption = option4Text;
                     break;
             }
+            System.out.println("CorrectOption "+ correctOption);
 
             // Insert exam data into ExamsData table
-            DBExamManager.insertExamData(subject, questionSet);
+//            DBExamManager.insertExamData(subject, questionSet);
 
             // Get the last inserted s_id
-            int s_id = getLastInsertedId("ExamsData");
+            int s_id = getSubjectId("examsdata", subject);
 
             // Insert question data into QuestionsData table
             DBExamManager.insertQuestionData(s_id, questionTxt, correctOption, option1Text, option2Text, option3Text, option4Text);
@@ -201,13 +203,15 @@ public class AddExam extends JFrame {
             clearFields();
         });
     }
-    private int getLastInsertedId(String tableName) {
-        String sql = "SELECT LAST_INSERT_ID() AS last_id FROM " + tableName;
+
+
+    private int getSubjectId(String tableName, String subject) {
+        String sql = "SELECT s_id FROM " + tableName + " WHERE subject = '" + subject + "'";
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/quiz_app", "root", "1234");
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             if (resultSet.next()) {
-                return resultSet.getInt("last_id");
+                return resultSet.getInt("s_id");
             }
         } catch (SQLException e) {
             e.printStackTrace();

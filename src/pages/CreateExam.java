@@ -143,11 +143,7 @@
             }
         }
 
-//        public void navigateFunction()
-//        {
-//            AdminDashboard navFunction = new AdminDashboard();
-//            navFunction.navigateFunction();
-//        }
+
 public void navigateFunction()
 {
     navigationDropDown.addActionListener(new ActionListener(){
